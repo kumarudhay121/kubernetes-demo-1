@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phpmysql
+  labels:
+    app: phpmysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpmysql
+  template:
+    metadata:
+      labels:
+        app: phpmysql
+    spec:
+      containers:
+      - name: phpmysql
+        image: phpmyadmin/phpmyadmin
+        env:
+        - name: PMA_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: mysql_configmap
+              key: host 
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: phpmysql_service
+spec:
+  ports:
+  - portocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    app: phpmysql
