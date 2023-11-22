@@ -21,18 +21,20 @@ spec:
         - name: PMA_HOST
           valueFrom:
             configMapKeyRef:
-              name: mysql_configmap
+              name: mysql-configmap
               key: host 
 
 --- 
 apiVersion: v1
 kind: Service
 metadata:
-  name: phpmysql_service
+  name: phpmysql-service
 spec:
   ports:
   - portocol: TCP
     port: 80
     targetPort: 80
+    nodePort: 30000
   selector:
     app: phpmysql
+  type: LoadBalancer
